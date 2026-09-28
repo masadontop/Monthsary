@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 32 Monthsary Baby &lt;3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Floating hearts -->
+    <div class="hearts" aria-hidden="true"></div>
+
+    <!-- COUNTDOWN -->
+    <section id="countdownScreen" class="screen active">
+        <div class="countdown-content">
+            <p class="small-text">Something special is waiting for you...</p>
+            <div id="countdown">3</div>
+            <p class="small-text">Get ready, babyyy &lt;3</p>
+        </div>
+    </section>
+
+    <!-- TITLE -->
+    <section id="titleScreen" class="screen hidden">
+        <div class="title-card">
+            <div class="sparkle">✦ ♡ ✦</div>
+            <h1>Happy 32 Monthsary<br>Baby &lt;3</h1>
+            <p>For the love of my life 💗</p>
+            <button id="continueBtn">Click Here to Continue 💕</button>
+            <p class="tap-hint">or click anywhere to continue</p>
+        </div>
+    </section>
+
+    <!-- PHOTO SLIDESHOW -->
+    <section id="galleryScreen" class="screen hidden">
+        <div class="gallery-card">
+            <p class="section-label">Our memories 💕</p>
+
+            <div class="photo-frame">
+                <img id="memoryPhoto" src="photo1.jpg" alt="Our memory">
+                <div class="photo-number" id="photoNumber">1 / 5</div>
+            </div>
+
+            <p id="photoCaption">A beautiful memory with you ♡</p>
+
+            <div class="gallery-controls">
+                <button id="prevBtn" class="nav-btn">←</button>
+                <button id="nextBtn" class="nav-btn">→</button>
+            </div>
+
+            <div class="dots" id="dots"></div>
+        </div>
+    </section>
+
+    <!-- LOVE LETTER -->
+    <section id="letterScreen" class="screen hidden">
+        <div class="letter">
+            <div class="letter-decoration">♡</div>
+            <p class="letter-date">For my favorite person</p>
+            <h2>My Dearest Baby,</h2>
+
+            <div class="letter-body">
+                <p>
+                    Happy 32 Monthsary Babyyyy &lt;3
+                </p>
+
+                <p>
+                    Thank you for Being a Great Partner and Making my life Wondeful and happy &lt;3
+                    i cant express how much of your presence means so much to me in my life &lt;3
+                </p>
+
+                <p>
+                    thank you for supporting all my decision and motivate me to do better in life and
+                    academics &lt;3
+                </p>
+
+                <p>
+                    i cant wait to marry you someday and spend my life with you &lt;3
+                    i wish more monthsary to come babyyy &lt;3 and more wondeful memories we will
+                    make together &lt;3
+                </p>
+
+                <p class="love-ending">
+                    iloveeeeeeeeyouuuusomuchhhhhh babyyyyy<br>
+                    mwaaaaaaaaaaaaaaaaa &lt;3
+                </p>
+            </div>
+
+            <div class="signature">
+                Forever yours,<br>
+                <span>♡ Your Baby ♡</span>
+            </div>
+
+            <div class="letter-hearts">♡ ♡ ♡</div>
+        </div>
+    </section>
+
+    <!-- MUSIC -->
+    <!-- Put your music file in this folder and rename it to music.mp3 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ================================
+        // EASY CUSTOMIZATION
+        // ================================
+
+        const photos = [
+            { src: "photo1.jpg", caption: "A beautiful memory with you ♡" },
+            { src: "photo2.jpg", caption: "One of my favorite moments with you 💕" },
+            { src: "photo3.jpg", caption: "Every moment with you is special ♡" },
+            { src: "photo4.jpg", caption: "More memories, more reasons to love you 💗" },
+            { src: "photo5.jpg", caption: "And many more memories to come... ♡" }
+        ];
+
+        // ================================
+        // SCREEN HELPERS
+        // ================================
+
+        const countdownScreen = document.getElementById("countdownScreen");
+        const titleScreen = document.getElementById("titleScreen");
+        const galleryScreen = document.getElementById("galleryScreen");
+        const letterScreen = document.getElementById("letterScreen");
+
+        function showScreen(screenToShow) {
+            [countdownScreen, titleScreen, galleryScreen, letterScreen].forEach(screen => {
+                screen.classList.add("hidden");
+                screen.classList.remove("active");
+            });
+
+            screenToShow.classList.remove("hidden");
+            screenToShow.classList.add("active");
+        }
+
+        // ================================
+        // 3-SECOND COUNTDOWN
+        // ================================
+
+        let count = 3;
+        const countdown = document.getElementById("countdown");
+
+        const countdownTimer = setInterval(() => {
+            count--;
+
+            if (count > 0) {
+                countdown.textContent = count;
+                countdown.classList.remove("count-pop");
+                void countdown.offsetWidth;
+                countdown.classList.add("count-pop");
+            } else {
+                clearInterval(countdownTimer);
+                showScreen(titleScreen);
+                // Try autoplay after countdown. Some browsers may block it.
+                startMusic();
+            }
+        }, 1000);
+
+        // ================================
+        // MUSIC
+        // ================================
+
+        const music = document.getElementById("bgMusic");
+        let musicStarted = false;
+
+        function startMusic() {
+            if (musicStarted && !music.paused) return;
+
+            music.volume = 0.85;
+
+            const promise = music.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    musicStarted = true;
+                }).catch(() => {
+                    // Browser blocked autoplay. The next user click/tap
+                    // will call this function again and start the music.
+                });
+            }
+        }
+
+        // ================================
+        // TITLE -> GALLERY
+        // Clicking anywhere also continues
+        // ================================
+
+        let galleryStarted = false;
+
+        function startGallery(event) {
+            if (galleryStarted) return;
+
+            // Don't trigger twice from the button itself
+            galleryStarted = true;
+            showScreen(galleryScreen);
+
+        }
+
+        titleScreen.addEventListener("click", (event) => {
+            startMusic();
+            startGallery(event);
+        });
+
+        // ================================
+        // PHOTO SLIDESHOW
+        // ================================
+
+        let currentPhoto = 0;
+        const memoryPhoto = document.getElementById("memoryPhoto");
+        const photoNumber = document.getElementById("photoNumber");
+        const photoCaption = document.getElementById("photoCaption");
+        const dots = document.getElementById("dots");
+
+        function createDots() {
+            dots.innerHTML = "";
+
+            photos.forEach((_, index) => {
+                const dot = document.createElement("span");
+                dot.className = "dot";
+                if (index === 0) dot.classList.add("selected");
+
+                dot.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    currentPhoto = index;
+                    updatePhoto();
+                });
+
+                dots.appendChild(dot);
+            });
+        }
+
+        function updatePhoto(direction = "next") {
+            memoryPhoto.classList.remove("slide-in-left", "slide-in-right");
+            void memoryPhoto.offsetWidth;
+
+            memoryPhoto.classList.add(
+                direction === "next" ? "slide-in-right" : "slide-in-left"
+            );
+
+            memoryPhoto.src = photos[currentPhoto].src;
+            photoCaption.textContent = photos[currentPhoto].caption;
+            photoNumber.textContent = `${currentPhoto + 1} / ${photos.length}`;
+
+            document.querySelectorAll(".dot").forEach((dot, index) => {
+                dot.classList.toggle("selected", index === currentPhoto);
+            });
+        }
+
+        document.getElementById("nextBtn").addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            if (currentPhoto < photos.length - 1) {
+                currentPhoto++;
+                updatePhoto("next");
+            } else {
+                showScreen(letterScreen);
+                createHeartBurst();
+            }
+        });
+
+        document.getElementById("prevBtn").addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            if (currentPhoto > 0) {
+                currentPhoto--;
+                updatePhoto("prev");
+            }
+        });
+
+        createDots();
+
+        // ================================
+        // FLOATING HEARTS
+        // ================================
+
+        const heartContainer = document.querySelector(".hearts");
+
+        function createHeart() {
+            const heart = document.createElement("span");
+            heart.className = "floating-heart";
+            heart.innerHTML = Math.random() > 0.5 ? "♡" : "♥";
+
+            heart.style.left = Math.random() * 100 + "%";
+            heart.style.animationDuration = (5 + Math.random() * 7) + "s";
+            heart.style.animationDelay = Math.random() * 2 + "s";
+            heart.style.fontSize = (12 + Math.random() * 24) + "px";
+
+            heartContainer.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 14000);
+        }
+
+        setInterval(createHeart, 500);
+
+        // ================================
+        // HEART BURST WHEN LETTER OPENS
+        // ================================
+
+        function createHeartBurst() {
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement("span");
+                heart.className = "burst-heart";
+                heart.innerHTML = "♥";
+
+                heart.style.left = "50%";
+                heart.style.top = "50%";
+                heart.style.setProperty("--x", (Math.random() - 0.5) * 700 + "px");
+                heart.style.setProperty("--y", (Math.random() - 0.5) * 700 + "px");
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 1600);
+            }
+        }
+
+        // Make sure the button works normally too.
+        document.getElementById("continueBtn").addEventListener("click", (event) => {
+            event.stopPropagation();
+            startMusic();
+            startGallery(event);
+        });
+    </script>
+
+</body>
+</html>
